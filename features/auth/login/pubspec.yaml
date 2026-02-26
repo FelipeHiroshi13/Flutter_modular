@@ -12,8 +12,13 @@ dependencies:
   dio: ^5.8.0+1
   retrofit: ^4.9.2
   json_annotation: ^4.9.0
+  dartz: ^0.10.1
+  domain:
+    path: ../../../core/domain
   data:
     path: ../../../core/data
+  extensions:
+    path: ../../../core/extensions
   flutter:
     sdk: flutter
 
