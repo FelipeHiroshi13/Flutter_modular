@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:data/error_handler/data_source.dart';
+import 'package:data/error_handler/dio_error_handler.dart';
 import 'package:data/network/network_info.dart';
 import 'package:domain/model/failure.dart';
-import 'package:domain/model/localised_message.dart';
 
 Future<Either<Failure, T>> safeApiCall<T>(
   NetworkInfo networkInfo,
@@ -12,19 +13,9 @@ Future<Either<Failure, T>> safeApiCall<T>(
       final response = await apiCall();
       return Right(response);
     } catch (e) {
-      return Left(
-        Failure(
-            message: LocalisedMessage(english: 'english', arabic: 'arabic'),
-            code: 0),
-      );
+      return Left(ErrorHandler.handle(e).failure);
     }
   } else {
-    return Left(
-      Failure(
-          message: LocalisedMessage(
-              english: 'No internet connection',
-              arabic: 'لا يوجد اتصال بالإنترنت'),
-          code: 0),
-    );
+    return Left(DataSource.noInternetConnection.failure);
   }
 }
