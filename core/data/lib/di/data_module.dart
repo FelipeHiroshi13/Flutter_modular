@@ -1,38 +1,36 @@
-import 'package:data/di/data_module_keys.dart';
 import 'package:data/factory/dio_factory.dart';
-import 'package:datastore/provider/preferences_provider.dart';
-import 'package:datastore/provider/session_provider.dart';
+import 'package:datastore/provider/preferences/preferences_provider.dart';
+import 'package:datastore/provider/preferences/preferences_provider_impl.dart';
+import 'package:datastore/provider/session/session_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'data_module_keys.dart';
+
 @module
 abstract class DataModule {
-  @preResolve
-  Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
-
-  @lazySingleton
-  IPreferencesProvider providePreferencesProvider(SharedPreferences prefs) =>
-      PreferencesProvider(prefs);
-
   // provide base url
-  @Named(DataModuleKeys.baseUrl)
-  String provideBaseUrl(IPreferencesProvider prefs) => prefs.getBaseUrl();
+  @Named(DataModuleKeys.baseUrl) // a tag for this string
+  String provideBaseUrl(PreferencesProvider preferencesProvider) =>
+      preferencesProvider.getBaseUrl();
 
-  @Named(DataModuleKeys.accessToken)
-  String provideAccessToken(ISessionProvider sessionProvider) =>
+  @Named(DataModuleKeys.accessToken) // a tag for this string
+  String provideAccessToken(SessionProvider sessionProvider) =>
       sessionProvider.getAccessToken();
 
-  @Named(DataModuleKeys.language)
-  String provideLanguage(IPreferencesProvider prefs) => prefs.getAppLanguage();
+  @Named(DataModuleKeys.language) // a tag for this string
+  String provideLanguage(PreferencesProvider preferencesProvider) =>
+      preferencesProvider.getAppLanguage();
 
   @lazySingleton
-  Future<Dio> dio(
-    @Named(DataModuleKeys.baseUrl) baseUrl,
-    @Named(DataModuleKeys.accessToken) String accessToken,
-    @Named(DataModuleKeys.language) String language,
-  ) async {
-    final dioFactory = DioFactory(baseUrl, accessToken, language);
+  Dio dio(
+      @Named(DataModuleKeys.baseUrl) String baseUrl,
+      @Named(DataModuleKeys.accessToken) String accessToken,
+      @Named(DataModuleKeys.language) String language) {
+    final dioFactory = DioFactory(
+        baseUrl: baseUrl, accessToken: accessToken, language: language);
+
     return dioFactory.getDio();
   }
 }

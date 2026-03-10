@@ -1,11 +1,7 @@
 class LoginModel {
-  const LoginModel({
-    required this.name,
-    required this.phone,
-    required this.age,
-  });
+  String name;
+  String phone;
+  int age;
 
-  final String name;
-  final String phone;
-  final int age;
+  LoginModel({required this.name, required this.phone, required this.age});
 }

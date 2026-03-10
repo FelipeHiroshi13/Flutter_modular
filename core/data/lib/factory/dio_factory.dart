@@ -4,38 +4,41 @@ import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioFactory {
-  const DioFactory(
-    this.baseUrl,
-    this.accessToken,
-    this.language,
-  );
-
   final String baseUrl;
   final String accessToken;
   final String language;
 
-  Future<Dio> getDio() async {
+  DioFactory({
+    required this.baseUrl,
+    required this.accessToken,
+    required this.language,
+  });
+
+  Dio getDio() {
     Dio dio = Dio();
+
     Map<String, String> headers = {
       contentType: applicationJson,
       accept: applicationJson,
-      // TODO: GET ACCESS TOKEN AND APP LANGUAGE
       authorization: accessToken,
       defaultLanguage: language,
-      clientId: 'your_client_id',
+      clientId: "app_client_id" // todo get app client id
     };
 
     dio.options = BaseOptions(
       baseUrl: baseUrl,
       headers: headers,
       receiveTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 60),
     );
+
+    // add logger in debug mode only NOT release
 
     if (!kReleaseMode) {
       dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
-        responseBody: true,
+        responseHeader: true,
       ));
     }
 

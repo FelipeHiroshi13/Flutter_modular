@@ -9,24 +9,30 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  injectable: ^2.5.0
   dio: ^5.8.0+1
-  retrofit: ^4.9.2
-  json_annotation: ^4.9.0
   dartz: ^0.10.1
+  retrofit: ^4.4.2
+  json_annotation: ^4.9.0
   domain:
     path: ../../../core/domain
+  datastore:
+    path: ../../../core/datastore
   data:
     path: ../../../core/data
   extensions:
     path: ../../../core/extensions
+  flutter_advanced_course_multi_modular_clean_architecture:
+    path: ../../..
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  injectable_generator: ^2.7.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  retrofit_generator: ^10.2.3
+  retrofit_generator: ^9.1.9
   build_runner: ^2.4.15
   json_serializable: ^6.9.4
 

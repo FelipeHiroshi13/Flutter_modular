@@ -1,9 +1,21 @@
 import 'package:extensions/constant/constant.dart';
 
 extension NonNullString on String? {
-  String get orEmpty => this ?? Constants.empty;
+  String orEmpty() {
+    if (this == null) {
+      return Constants.empty;
+    } else {
+      return this!; // 100% its not null so we used !
+    }
+  }
 }
 
 extension NonNullInteger on int? {
-  int get orZero => this ?? Constants.zero;
+  int orZero() {
+    if (this == null) {
+      return Constants.zero;
+    } else {
+      return this!; // 100% its not null so we used !
+    }
+  }
 }

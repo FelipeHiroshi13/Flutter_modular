@@ -1,5 +1,5 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format width=80
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -9,15 +9,17 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:datastore/di/data_store_module.dart' as _i570;
-import 'package:datastore/provider/preferences_provider.dart' as _i1063;
-import 'package:datastore/provider/session_provider.dart' as _i265;
+import 'package:datastore/di/datastore_module.dart' as _i746;
+import 'package:datastore/provider/preferences/preferences_provider.dart'
+    as _i940;
+import 'package:datastore/provider/session/session_provider.dart' as _i1014;
+import 'package:datastore/provider/session/session_provider_impl.dart' as _i385;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
-const String _prod = 'prod';
 const String _dev = 'dev';
+const String _prod = 'prod';
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -35,20 +37,18 @@ extension GetItInjectableX on _i174.GetIt {
       () => dataStoreModule.prefs,
       preResolve: true,
     );
-    gh.factory<_i265.ISessionProvider>(
-      () => _i265.SessionProviderProd(
-          sharedPreferences: gh<_i460.SharedPreferences>()),
-      registerFor: {_prod},
-    );
-    gh.factory<_i265.ISessionProvider>(
-      () => _i265.SessionProviderDev(
-          sharedPreferences: gh<_i460.SharedPreferences>()),
+    gh.lazySingleton<_i940.PreferencesProvider>(() => dataStoreModule
+        .providePreferencesProviderImpl(gh<_i460.SharedPreferences>()));
+    gh.factory<_i1014.SessionProvider>(
+      () => _i385.DevSessionProviderImpl(gh<_i460.SharedPreferences>()),
       registerFor: {_dev},
     );
-    gh.lazySingleton<_i1063.IPreferencesProvider>(() => dataStoreModule
-        .providePreferencesProviderImpl(gh<_i460.SharedPreferences>()));
+    gh.factory<_i1014.SessionProvider>(
+      () => _i385.ProdSessionProviderImpl(gh<_i460.SharedPreferences>()),
+      registerFor: {_prod},
+    );
     return this;
   }
 }
 
-class _$DataStoreModule extends _i570.DataStoreModule {}
+class _$DataStoreModule extends _i746.DataStoreModule {}
