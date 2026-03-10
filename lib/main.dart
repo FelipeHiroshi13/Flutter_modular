@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'App theme: ${appSettingsProvider.themeType()}',
             ),
             Text(
-              'Access Token: ${appSessionProvider.getAcessToken()}',
+              'Access Token: ${appSessionProvider.getAccessToken()}',
             ),
             Text(
               '$_counter',
