@@ -9,28 +9,46 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:datastore/di/data_store_module.dart' as _i570;
+import 'package:datastore/provider/preferences_provider.dart' as _i1063;
 import 'package:datastore/provider/session_provider.dart' as _i265;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
-const String _dev = 'dev';
 const String _prod = 'prod';
+const String _dev = 'dev';
 
 extension GetItInjectableX on _i174.GetIt {
-  // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+// initializes the registration of main-scope dependencies inside of GetIt
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
-    final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    gh.factory<_i265.ISessionProvider>(
-      () => _i265.SessionProviderDev(),
-      registerFor: {_dev},
+  }) async {
+    final gh = _i526.GetItHelper(
+      this,
+      environment,
+      environmentFilter,
+    );
+    final dataStoreModule = _$DataStoreModule();
+    await gh.factoryAsync<_i460.SharedPreferences>(
+      () => dataStoreModule.prefs,
+      preResolve: true,
     );
     gh.factory<_i265.ISessionProvider>(
-      () => _i265.SessionProviderProd(),
+      () => _i265.SessionProviderProd(
+          sharedPreferences: gh<_i460.SharedPreferences>()),
       registerFor: {_prod},
     );
+    gh.factory<_i265.ISessionProvider>(
+      () => _i265.SessionProviderDev(
+          sharedPreferences: gh<_i460.SharedPreferences>()),
+      registerFor: {_dev},
+    );
+    gh.lazySingleton<_i1063.IPreferencesProvider>(() => dataStoreModule
+        .providePreferencesProviderImpl(gh<_i460.SharedPreferences>()));
     return this;
   }
 }
+
+class _$DataStoreModule extends _i570.DataStoreModule {}
